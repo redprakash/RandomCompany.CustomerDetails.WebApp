@@ -1,0 +1,33 @@
+﻿@model IEnumerable<RandomCompany.CustomerDetails.WebApp.Models.Customer>
+@{
+    ViewData["Title"] = "View All Customer";
+}
+
+<h1>List of Customers</h1>
+<a class="btn btn-primary mt-4" asp-controller="Customer" asp-action="AddCustomer">Add Customer</a>
+<table class="table-bordered mt-5" cellpadding="4">
+    <thead>
+        <tr>
+            <th>Customer Details</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+
+                <td>@item.FirstName @item.LastName</td>
+                <td>
+                    <a class="btn btn-outline-success" asp-controller="Customer" asp-action="Details" asp-route-Id="@item.Id">View</a> | 
+                    <a class="btn btn-outline-warning" asp-controller="Customer" asp-action="UpdateCustomer" asp-route-Id="@item.Id">Edit</a>  | 
+                    <a class="btn btn-outline-danger" asp-controller="Customer" asp-action="DeleteCustomer" asp-route-Id="@item.Id">Delete</a>
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+

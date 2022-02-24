@@ -18,14 +18,14 @@ namespace RandomCompany.CustomerDetails.WebApp.Repositories
 
         public List<Customer> GetAllCustomers()
         {
-            using SqlConnection con = new(_connectionString);
+            using IDbConnection con = new SqlConnection(_connectionString);
             var sqlQuery = "SELECT * FROM CustomerDetails";
             return (List<Customer>)con.Query<Customer>(sqlQuery);
         }
 
         public Customer CreateNewCustomer(Customer customer)
         {
-            using SqlConnection con = new(_connectionString);
+            using IDbConnection con = new SqlConnection(_connectionString);
             var insertQuery = "INSERT INTO CustomerDetails(FirstName, LastName, Email, Address)  VALUES(@FirstName,@LastName,@Email,@Address)";
 
             con.Execute(insertQuery, new
@@ -40,7 +40,7 @@ namespace RandomCompany.CustomerDetails.WebApp.Repositories
 
         public void UpdateCustomer(Customer customer)
         {
-            using SqlConnection con = new(_connectionString);
+            using IDbConnection con = new SqlConnection(_connectionString);
             string updateQuery = "UPDATE CustomerDetails SET FirstName =@FirstName,LastName=@LastName,Email=@Email,Address=@Address WHERE Id=@Id";
             con.Execute(updateQuery, new
             {
@@ -54,7 +54,7 @@ namespace RandomCompany.CustomerDetails.WebApp.Repositories
 
         public void DeleteCustomer(int id)
         {
-            using SqlConnection con = new(_connectionString);
+            using IDbConnection con = new SqlConnection(_connectionString);
             string deleteQuery = "DELETE FROM CustomerDetails WHERE Id=@Id ";
             con.Execute(deleteQuery, new
             {

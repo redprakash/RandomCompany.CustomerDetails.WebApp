@@ -6,15 +6,19 @@ namespace RandomCompany.CustomerDetails.WebApp.Controllers
 {
     public class CustomerController : Controller
     {
+        private readonly CustomerDetailRepositories _customerDetailRepositories;
+        public CustomerController(CustomerDetailRepositories repositories)
+        {
+            _customerDetailRepositories = repositories;
+        }
         public IActionResult Index()
         {
             return View();
         }
         public IActionResult ViewCustomer()
         {
-            CustomerDetailRepositories customerDetailRepositories = new();
 
-            return View(customerDetailRepositories.GetCustomerDetails());
+            return View(_customerDetailRepositories.GetAllCustomers());
         }
 
         //Get AddCustomer form pagte
@@ -30,13 +34,9 @@ namespace RandomCompany.CustomerDetails.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                CustomerDetailRepositories customerDetailRepositories = new();
-                if (customerDetailRepositories.CreateNewCustomer(customer))
-                {
-                    ViewBag.AlertMsg = "Customer Added Successfully";
-                    ModelState.Clear();
-                }
-               
+                _customerDetailRepositories.CreateNewCustomer(customer);
+                ViewBag.AlertMsg = "Customer Added Successfully";
+                ModelState.Clear();
             }
             return View();
             //return View(customerDetailRepositories.CreateNewCustomer()); 
@@ -45,16 +45,15 @@ namespace RandomCompany.CustomerDetails.WebApp.Controllers
         [HttpGet]
         public IActionResult UpdateCustomer(int id)
         {
-            CustomerDetailRepositories customerDetailRepositories = new();
-            return View(customerDetailRepositories.GetCustomerDetails().Find(cust => cust.Id == id));
+
+            return View(_customerDetailRepositories.GetAllCustomers().Find(cust => cust.Id == id));
         }
         [HttpPost]
-        public IActionResult UpdateCustomer(int  id, Customer customer)
+        public IActionResult UpdateCustomer(int id, Customer customer)
         {
             try
             {
-                CustomerDetailRepositories customerDetailRepositories = new();
-                customerDetailRepositories.UpdateCustomer(customer);
+                _customerDetailRepositories.UpdateCustomer(customer);
                 ViewBag.AlertMsg = "Update Success";
                 return View(customer);
                 //return RedirectToAction("ViewCustomer");
@@ -64,8 +63,8 @@ namespace RandomCompany.CustomerDetails.WebApp.Controllers
 
         public IActionResult Details(int id)
         {
-            CustomerDetailRepositories customerDetailRepositories = new();
-            return View(customerDetailRepositories.GetCustomerDetails().Find(cust=>cust.Id == id));
+
+            return View(_customerDetailRepositories.GetAllCustomers().Find(cust => cust.Id == id));
         }
 
 
@@ -73,15 +72,15 @@ namespace RandomCompany.CustomerDetails.WebApp.Controllers
         [HttpGet]
         public IActionResult DeleteCustomer(int id)
         {
-            CustomerDetailRepositories customerDetailRepositories = new();
-            return View(customerDetailRepositories.GetCustomerDetails().Find(cust => cust.Id == id));
+
+            return View(_customerDetailRepositories.GetAllCustomers().Find(cust => cust.Id == id));
         }
-        public IActionResult DeleteCustomer(int id,Customer customer)
+        public IActionResult DeleteCustomer(int id, Customer customer)
         {
             try
             {
-                CustomerDetailRepositories customerDetailRepositories = new();
-                customerDetailRepositories.DeleteCustomer(id);
+
+                _customerDetailRepositories.DeleteCustomer(id);
                 return RedirectToAction("ViewCustomer");
             }
             catch
